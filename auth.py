@@ -1,48 +1,42 @@
-
-
 import json
 import os
 import hashlib
 
-# Create data folder
-if not os.path.exists("data"):
-    os.makedirs("data")
-
-# User data file
-USER_FILE = "data/users.json"
+DATA_FILE = "data/users.json"
 
 
-# Read user records
+# Create data folder if it does not exist
+os.makedirs("data", exist_ok=True)
+
+
+# Load users from JSON file
 def load_users():
+    if not os.path.exists(DATA_FILE):
+        return []
 
-    if os.path.exists(USER_FILE):
-        with open(USER_FILE, "r") as file:
-            return json.load(file)
-
-    return []
+    with open(DATA_FILE, "r") as file:
+        return json.load(file)
 
 
-# Save user records
+# Save users to JSON file
 def save_users(users):
-
-    with open(USER_FILE, "w") as file:
+    with open(DATA_FILE, "w") as file:
         json.dump(users, file, indent=4)
 
 
-# Password encryption using hashing
+# Hash password
 def hash_password(password):
-
     return hashlib.sha256(password.encode()).hexdigest()
 
 
-# Job seeker registration
+# Job Seeker Registration
 def jobseeker_register():
 
-    print("\n----- JOB SEEKER REGISTRATION -----")
+    print("\n--- Job Seeker Registration ---")
 
-    name = input("Enter Full Name: ")
-    email = input("Enter Email: ")
-    password = input("Enter Password: ")
+    name = input("Enter your name: ")
+    email = input("Enter your email: ")
+    password = input("Enter password: ")
 
     users = load_users()
 
@@ -61,17 +55,17 @@ def jobseeker_register():
     users.append(new_user)
     save_users(users)
 
-    print("\nJob Seeker Registration Successful!")
+    print("Job Seeker registered successfully!")
 
 
-# Recruiter registration
+# Recruiter Registration
 def recruiter_register():
 
-    print("\n----- RECRUITER REGISTRATION -----")
+    print("\n--- Recruiter Registration ---")
 
-    name = input("Enter Recruiter Name: ")
-    email = input("Enter Email: ")
-    password = input("Enter Password: ")
+    name = input("Enter recruiter name: ")
+    email = input("Enter email: ")
+    password = input("Enter password: ")
 
     users = load_users()
 
@@ -90,48 +84,48 @@ def recruiter_register():
     users.append(new_user)
     save_users(users)
 
-    print("\nRecruiter Registration Successful!")
+    print("Recruiter registered successfully!")
 
 
-# Job seeker login
+# Job Seeker Login
 def jobseeker_login():
 
-    print("\n----- JOB SEEKER LOGIN -----")
+    print("\n--- Job Seeker Login ---")
 
-    email = input("Enter Email: ")
-    password = input("Enter Password: ")
+    email = input("Enter email: ")
+    password = input("Enter password: ")
 
     users = load_users()
 
     for user in users:
-        if (user["email"] == email and
-                user["password"] == hash_password(password) and
-                user["role"] == "jobseeker"):
+        if (user["email"] == email
+                and user["password"] == hash_password(password)
+                and user["role"] == "jobseeker"):
 
-            print("\nLogin Successful!")
-            print("Welcome", user["name"])
-            return
+            print("Login successful!")
+            return user
 
-    print("\nInvalid Email or Password!")
+    print("Invalid email or password!")
+    return None
 
 
-# Recruiter login
+# Recruiter Login
 def recruiter_login():
 
-    print("\n----- RECRUITER LOGIN -----")
+    print("\n--- Recruiter Login ---")
 
-    email = input("Enter Email: ")
-    password = input("Enter Password: ")
+    email = input("Enter email: ")
+    password = input("Enter password: ")
 
     users = load_users()
 
     for user in users:
-        if (user["email"] == email and
-                user["password"] == hash_password(password) and
-                user["role"] == "recruiter"):
+        if (user["email"] == email
+                and user["password"] == hash_password(password)
+                and user["role"] == "recruiter"):
 
-            print("\nLogin Successful!")
-            print("Welcome", user["name"])
-            return
+            print("Login successful!")
+            return user
 
-    print("\nInvalid Email or Password!")
+    print("Invalid email or password!")
+    return None
